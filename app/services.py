@@ -1,28 +1,37 @@
 import os
 import json
-# File path for users.json
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_FILE = os.path.join(BASE_DIR, "data", "users.json")
+from pathlib import Path
 
-# Ensure the data directory and file exist
-os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
-if not os.path.exists(DATA_FILE):
-    with open(DATA_FILE, "w") as f:
-        json.dump({"data": []}, f)
+BASE_DIR = Path(__file__).resolve().parent
+datafolder = os.path.join(BASE_DIR, "data")
+datasource = os.path.join(datafolder, "users.json")
 
-def add_userdata(user_data: dict):
-    """
-    Add user data to users.json file
-    """
-    with open(DATA_FILE, "r+") as f:
-        data = json.load(f)
-        data["data"].append(user_data)
-        f.seek(0)
-        json.dump(data, f, indent=4)
+def check_dataset_exists():
+    if not os.path.exists(datafolder):
+        os.mkdir(datafolder)
+    if not os.path.exists(datasource):
+        with open(datasource, "w") as f:
+            f.write("")
+            
+            
+def read_usersdata():
+    check_dataset_exists()
+    with open(datasource, "r") as f:
+        content = f.read()
+        if content == "":
+            content = '{"data": []}'
+        users = json.loads(content)
+    return users
 
-def read_usersdata() -> dict:
-    """
-    Read user data from users.json file
-    """
-    with open(DATA_FILE, "r") as f:
-        return json.load(f)
+
+def add_userdata(user: dict):
+    users = read_usersdata()
+
+    with open(datasource, "w") as f:
+        if "data" in users:
+            users["data"].append(user)
+        else:
+            users["data"] = [user]
+
+        data = json.dumps(users, indent=2)
+        f.write(data)
