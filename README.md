@@ -18,8 +18,6 @@ This application:
 
 ---
 
-## **1. How to Build and Run the Application**
-
 ### **Prerequisites**
 - Install [Docker](https://www.docker.com/products/docker-desktop).
 - Install [Docker Compose](https://docs.docker.com/compose/install/).
