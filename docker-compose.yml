@@ -1,13 +1,6 @@
 version: "3.9"
-services:
-  core_api:
-    build: .
-    container_name: docker-fastapi-test
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
 
+services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -15,6 +8,8 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
 
   grafana:
     image: grafana/grafana
@@ -23,6 +18,23 @@ services:
       - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
+    networks:
+      - monitoring
+
+  core_api:
+    build: .
+    container_name: docker-fastapi-test
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./data:/data
+    networks:
+      - monitoring
 
 volumes:
   grafana-data:
+
+networks:
+  monitoring:
+    driver: bridge
