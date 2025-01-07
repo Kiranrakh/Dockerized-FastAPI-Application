@@ -1,4 +1,5 @@
-from typing import List
+# from typing import List
+from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi import FastAPI
 
 from app import services
@@ -6,13 +7,15 @@ from app.schema import UserIn, BaseResponse, UserListOut
 
 app = FastAPI()
 
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
+
 
 @app.get("/")
 async def index():
     """
     Index route for our application
     """
-    return {"message": "Hello from FastAPI ;)"}
+    return {"message": "Hello from FastAPI -@kiranrakh155@gmail.com ;)"}
 
 
 @app.post("/users", response_model=BaseResponse)
