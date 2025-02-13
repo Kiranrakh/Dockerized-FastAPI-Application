@@ -1,4 +1,4 @@
-# docker-fastapi-test
+# Dockerized-FastAPI-Application
 
 # Dockerized FastAPI Application with Monitoring and CI/CD Pipeline
 
