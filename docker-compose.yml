@@ -1,40 +1,10 @@
 version: "3.9"
 
 services:
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - monitoring
-
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana-data:/var/lib/grafana
-    networks:
-      - monitoring
-
-  core_api:
+  fastapi_app:
     build: .
-    container_name: docker-fastapi-test
+    container_name: fastapi_app
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
-      - ./data:/data
-    networks:
-      - monitoring
-
-volumes:
-  grafana-data:
-
-networks:
-  monitoring:
-    driver: bridge
+      - ./app/data:/app/app/data  # Persist users.json
